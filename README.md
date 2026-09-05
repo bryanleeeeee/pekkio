@@ -51,3 +51,17 @@ The **3D Pek Kio** tab sits immediately beside AI Quest. It contains an interact
 Created with Blender 5.2.1 LTS. Rebuild with `blender --background --python scripts/build_pekkio.py -- /absolute/output/path`. This writes a `.blend`, `.glb`, and transparent `.png`. Convert the PNG to the web poster with sharp. Source reference: [onePA Pek Kio CC](https://www.onepa.gov.sg/cc/pek-kio-cc). The school/CC relationship is documented by [Farrer Park Primary School](https://www.farrerparkpri.moe.edu.sg/partners/pek-kio-cc/). Original modelling code and geometry are in this repository; no third-party 3D assets are included.
 
 The viewer is loaded on demand through Google's `model-viewer`, with a still-picture fallback when WebGL is unavailable. The 3D scene is authored in Blender, not AI-generated.
+
+## Neighbourhood-scale 3D map
+
+The same **3D Pek Kio** tab now defaults to a **1.5 km radius** around Pek Kio Community Centre (3 km across). This is an exploration extent, not an official neighbourhood boundary. The original CC miniature remains available with the scale switch.
+
+The Blender model uses a local OpenStreetMap snapshot, including mapped building footprints/parts, roads, paths and green/water areas. The initial release contains 5,530 building shapes and parts, 6,648 road/path sections and 106 green/water polygons. These are geometry counts, not counts of unique addresses, streets or parks. The projection uses local metres around 1.31308 N, 103.85138 E, scaled to .02 Blender units per metre. Geometry is clipped to a 1.5 km circular extent.
+
+Height provenance: 426 shapes use mapped heights; 2,491 derive height from tagged storeys (3.2 m/storey); 2,613 use category estimates. The CC height is an estimate. Terrain is flat, 46 courtyard relations are simplified, roof shapes/facades are not reconstructed, and heights are capped at 250 m. Building parts can overlap parent footprints. It is a stylised map, not a digital twin or a surveying/navigation product. Station pins indicate mapped station centres, not exact street-level entrances.
+
+The GLB uses Draco compression and material batching (about 1.4 MB in this release). The browser loads the decoder as needed. Eight landmarks have camera jumps: CC, market, Pek Kio Park, Farrer Park MRT, Little India MRT, Indian Heritage Centre, City Square Mall and Novena MRT. A static Blender render, editable .blend and the source map extract are downloadable.
+
+**Attribution/licence:** © OpenStreetMap contributors, [ODbL 1.0](https://www.openstreetmap.org/copyright). The source snapshot is available at `public/data/pekkio-osm.json.gz`; retrieval/query/projection/provenance are in `public/data/district.json`. Preserve attribution and comply with ODbL when redistributing source or derived map data. The website always displays the attribution link on the district view, and the render includes an attribution caption.
+
+To rebuild from the included snapshot: `blender --background --python scripts/build_neighbourhood.py` (Blender 5.2.1). It reads the raw JSON if available or the included gzip otherwise, generates geometry, metadata, compressed GLB, Blender scene and PNG. Use sharp to convert PNG to WebP. To refresh the map snapshot first, run `node scripts/fetch_neighbourhood.mjs`; this makes a bounded Overpass request and writes the snapshot and retrieval metadata. Review changes and regenerate the scene rather than fetching map geometry on every visitor request.

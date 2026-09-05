@@ -50,4 +50,8 @@ Opt-in resident contributions and moderation; venue-verified opening data; route
 
 ## Optional visual opening
 
-Open **3D Pek Kio**, immediately beside AI Quest. Rotate the Blender miniature and switch to the street view. Explain that the coral façade is based on the Community Centre reference photo; surrounding buildings are illustrative. This is original Blender modelling, while the separate AI Quest performs real neural semantic matching. Keep those two technologies distinct in the pitch.
+Open **3D Pek Kio**, immediately beside AI Quest. Select **CC miniature**, rotate the Blender model and switch to the street view. Explain that the coral façade is based on the Community Centre reference photo; surrounding buildings are illustrative. This is original Blender modelling, while the separate AI Quest performs real neural semantic matching. Keep those two technologies distinct in the pitch.
+
+## Neighbourhood-scale 3D demo
+
+Start 3D Pek Kio at the district overview: a 1.5 km radius, not an official boundary. Jump to Pek Kio Market, Farrer Park MRT and Little India, then use CC miniature to show the original detailed illustration. Explain that the larger model is built in Blender from OpenStreetMap geometry, with mapped or estimated heights, while the separate AI Quest performs semantic matching. Do not describe the model as a live map, photogrammetry, AI-generated geometry or a surveyed digital twin. OpenStreetMap attribution and source data are available directly in the viewer.

@@ -1,0 +1,110 @@
+{
+  "center": {
+    "lat": 1.31308,
+    "lon": 103.85138
+  },
+  "radiusMeters": 1500,
+  "retrievedAt": "2026-09-05T12:14:00.490Z",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "query": "[out:json][timeout:90];(way[building](around:1500,1.31308,103.85138);relation[building](around:1500,1.31308,103.85138);way[\"building:part\"](around:1500,1.31308,103.85138);relation[\"building:part\"](around:1500,1.31308,103.85138);way[highway](around:1550,1.31308,103.85138);way[waterway](around:1550,1.31308,103.85138);way[natural=water](around:1500,1.31308,103.85138);way[leisure~\"park|garden|pitch\"](around:1500,1.31308,103.85138);nwr[name][amenity~\"marketplace|community_centre|hospital|school\"](around:1500,1.31308,103.85138);nwr[name][railway=station](around:1500,1.31308,103.85138););out body geom;",
+  "licence": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "url": "https://www.openstreetmap.org/copyright",
+  "sceneUnitsPerMeter": 0.02,
+  "stats": {
+    "buildings": 5530,
+    "heightMapped": 426,
+    "heightFromLevels": 2491,
+    "heightEstimated": 2613,
+    "roadWays": 6648,
+    "greenAreas": 106,
+    "simplifiedCourtyards": 46
+  },
+  "anchors": [
+    {
+      "id": "mall",
+      "name": "City Square Mall",
+      "osmId": 102429452,
+      "x": 11.6162,
+      "z": 3.7325,
+      "lat": 1.3113922384615384,
+      "lon": 103.85659885384615,
+      "height": 0.256,
+      "pinHeight": 1.056
+    },
+    {
+      "id": "market",
+      "name": "Pek Kio Market & Food Centre",
+      "osmId": 169103322,
+      "x": -2.5788,
+      "z": -6.9974,
+      "lat": 1.316244125,
+      "lon": 103.85022141249999,
+      "height": 0.064,
+      "pinHeight": 0.864
+    },
+    {
+      "id": "heritage",
+      "name": "Indian Heritage Centre",
+      "osmId": 176326997,
+      "x": 1.9358,
+      "z": 16.3752,
+      "lat": 1.3056753833333334,
+      "lon": 103.85224971666668,
+      "height": 0.256,
+      "pinHeight": 1.056
+    },
+    {
+      "id": "cc",
+      "name": "Pek Kio Community Centre",
+      "osmId": 295367642,
+      "x": 0.0239,
+      "z": 0.0067,
+      "lat": 1.3130769500000001,
+      "lon": 103.85139075000001,
+      "height": 0.3,
+      "pinHeight": 1.1
+    },
+    {
+      "id": "little",
+      "name": "Little India",
+      "osmId": 743566214,
+      "x": -4.6033,
+      "z": 13.6868,
+      "lat": 1.3068910058823529,
+      "lon": 103.84931185686274,
+      "pinHeight": 1.0
+    },
+    {
+      "id": "farrer",
+      "name": "Farrer Park",
+      "osmId": 743566215,
+      "x": 6.7265,
+      "z": 1.6435,
+      "lat": 1.3123368540983607,
+      "lon": 103.85440203278688,
+      "pinHeight": 1.0
+    },
+    {
+      "id": "novena",
+      "name": "Novena",
+      "osmId": 743655241,
+      "x": -16.5616,
+      "z": -16.467,
+      "lat": 1.3205261333333334,
+      "lon": 103.8439393,
+      "pinHeight": 1.0
+    },
+    {
+      "id": "park",
+      "name": "Pek Kio Park",
+      "osmId": 1232950362,
+      "x": -3.9346,
+      "z": -7.5915,
+      "lat": 1.31651275,
+      "lon": 103.84961228333333
+    }
+  ],
+  "method": "Mapped footprints and roads; mapped heights, levels x 3.2m, or estimated category heights. Flat ground; simplified roofs and courtyards.",
+  "buildingHeightCeilingMeters": 250
+}

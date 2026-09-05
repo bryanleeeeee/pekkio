@@ -1,0 +1,13 @@
+{
+  "center": {
+    "lat": 1.31308,
+    "lon": 103.85138
+  },
+  "radiusMeters": 1500,
+  "retrievedAt": "2026-09-05T12:14:00.490Z",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "query": "[out:json][timeout:90];(way[building](around:1500,1.31308,103.85138);relation[building](around:1500,1.31308,103.85138);way[\"building:part\"](around:1500,1.31308,103.85138);relation[\"building:part\"](around:1500,1.31308,103.85138);way[highway](around:1550,1.31308,103.85138);way[waterway](around:1550,1.31308,103.85138);way[natural=water](around:1500,1.31308,103.85138);way[leisure~\"park|garden|pitch\"](around:1500,1.31308,103.85138);nwr[name][amenity~\"marketplace|community_centre|hospital|school\"](around:1500,1.31308,103.85138);nwr[name][railway=station](around:1500,1.31308,103.85138););out body geom;",
+  "licence": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "url": "https://www.openstreetmap.org/copyright"
+}

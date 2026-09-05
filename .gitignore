@@ -6,3 +6,6 @@ node_modules/
 
 .vercel
 .env*
+
+public/data/pekkio-osm.json
+*.blend1

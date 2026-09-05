@@ -3790,3 +3790,209 @@ dialog::backdrop {
     font-size: 6px !important;
   }
 }
+/* Neighbourhood-scale Blender map. */
+.scene-scale {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 24px;
+  background: #ebedde;
+  flex-shrink: 0;
+}
+.scene-scale button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 13px;
+  border-radius: 22px;
+  font-size: 10px;
+}
+.scene-scale button[aria-pressed="true"] {
+  background: #2e4938;
+  color: #fffdf0;
+}
+.district-guide {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 13px;
+  flex-shrink: 0;
+}
+.district-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.district-selector select {
+  font: inherit;
+  font-size: 11px;
+  color: var(--ink);
+  background: #fffdf5;
+  border: 1px solid #d9e1cf;
+  border-radius: 9px;
+  padding: 9px 30px 9px 11px;
+  max-width: 330px;
+}
+.district-guide > span {
+  font-size: 9px;
+  color: var(--muted);
+}
+.district-guide b {
+  font-weight: 600;
+  color: #527149;
+}
+.district-hotspot {
+  position: relative;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: auto;
+}
+.hotspot-dot {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #fffaf0;
+  border-radius: 50%;
+  background: #3f6851;
+  color: white;
+  box-shadow: 0 2px 8px #1f382c45;
+  font-size: 20px;
+}
+.district-hotspot:first-child .hotspot-dot {
+  background: #c67756;
+  font-size: 13px;
+}
+.hotspot-name {
+  position: absolute;
+  left: 29px;
+  top: 0;
+  width: max-content;
+  background: #fffdf2ed;
+  color: #304b37;
+  border: 1px solid #d7dfc9;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 9px;
+  box-shadow: 0 2px 6px #203d2510;
+  display: none;
+}
+.district-hotspot:hover .hotspot-name,
+.district-hotspot:focus-visible .hotspot-name,
+.district-hotspot.active .hotspot-name {
+  display: block;
+}
+.district-hotspot.active .hotspot-dot {
+  background: #be7b50;
+  outline: 3px solid #e9d4b6;
+}
+.scene-bottom-overlay a {
+  pointer-events: auto;
+  background: #fffdf2e8;
+  border-radius: 7px;
+  padding: 7px 10px;
+  color: #425e44;
+  text-decoration: underline;
+}
+.scene-footnote a {
+  text-decoration: underline;
+}
+.district-view .scene-stage {
+  min-height: 230px;
+}
+.district-selector select:focus-visible {
+  outline: 2px solid #688663;
+  outline-offset: 3px;
+}
+@media (max-width: 1000px) {
+  .district-guide > span {
+    font-size: 8px;
+  }
+  .scene-scale button {
+    font-size: 9px;
+    padding: 8px 10px;
+  }
+  .district-view h1 {
+    font-size: 29px;
+  }
+}
+@media (max-width: 700px) {
+  .district-view .view-heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 9px;
+    padding-bottom: 10px;
+  }
+  .district-view h1 {
+    font-size: 23px;
+  }
+  .district-view .eyebrow {
+    font-size: 5px;
+    letter-spacing: 0.5px;
+  }
+  .scene-scale {
+    align-self: flex-start;
+    padding: 3px;
+  }
+  .scene-scale button {
+    font-size: 8px;
+    padding: 7px 11px;
+  }
+  .scene-scale svg {
+    width: 12px;
+    height: 12px;
+  }
+  .district-guide {
+    margin-bottom: 9px;
+    gap: 6px;
+  }
+  .district-selector {
+    gap: 5px;
+    min-width: 0;
+    flex: 1;
+  }
+  .district-selector select {
+    font-size: 9px;
+    padding: 8px;
+    max-width: 100%;
+    width: 100%;
+  }
+  .district-guide > span {
+    display: none;
+  }
+  .district-view .scene-stage {
+    min-height: 190px;
+  }
+  .district-view .scene-presets button {
+    font-size: 7px;
+    padding: 7px 6px;
+    gap: 3px;
+  }
+  .scene-bottom-overlay a {
+    padding: 5px 7px;
+    font-size: 7px;
+  }
+  .hotspot-dot {
+    width: 19px;
+    height: 19px;
+    font-size: 16px;
+  }
+  .hotspot-name {
+    font-size: 8px;
+    left: 23px;
+    padding: 4px 6px;
+    max-width: 130px;
+    white-space: normal;
+  }
+  .district-hotspot:first-child .hotspot-dot {
+    font-size: 10px;
+  }
+  .district-view .scene-footnote {
+    font-size: 6px;
+    line-height: 1.5;
+  }
+}
