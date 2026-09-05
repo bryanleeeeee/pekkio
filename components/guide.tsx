@@ -5,7 +5,11 @@ import dynamic from "next/dynamic";
 const Quest = dynamic(() => import("./quest"), {
   loading: () => <p>Opening your little adventure…</p>,
 });
+const Scene = dynamic(() => import("./scene"), {
+  loading: () => <p>Opening 3D Pek Kio…</p>,
+});
 import {
+  Box,
   ArrowUpRight,
   ArrowRight,
   Search,
@@ -32,6 +36,7 @@ import type { Story } from "@/lib/news";
 const tabs = [
   { id: "discover", label: "Discover", Icon: Compass },
   { id: "quest", label: "AI Quest", Icon: Sparkles },
+  { id: "scene", label: "3D Pek Kio", Icon: Box },
   { id: "food", label: "Good food", Icon: Utensils },
   { id: "activities", label: "Go & do", Icon: Sun },
   { id: "news", label: "Local buzz", Icon: Newspaper },
@@ -327,6 +332,7 @@ export default function Guide({
         }
       >
         {tab === "quest" && <Quest onPlace={setSelected} />}
+        {tab === "scene" && <Scene />}
         {tab === "discover" && (
           <div className="view home-view" key="discover">
             <div className="view-heading">

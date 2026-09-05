@@ -43,3 +43,11 @@ The AI Quest tab uses a quantized MiniLM semantic embedding model through Transf
 The latest trail and self-marked passport are persisted on-device. Share links include a validated list of up to three known place IDs; prompts and passport data are not included. The illustrated stop sequence is not a map and transfer allowances are estimates. Read `HACKATHON.md` for the demo script, architecture and honest limitations. The model card is linked inside the AI explanation dialog.
 
 The AI library has pinned transitive overrides for patched `sharp` and `adm-zip` versions. Run `npm audit` after dependency updates. Source content remains in `lib/places.ts`; the worker receives a compact corpus from `lib/quest.ts`.
+
+## Blender miniature
+
+The **3D Pek Kio** tab sits immediately beside AI Quest. It contains an interactive GLB model, camera presets, a rendered picture and an editable Blender scene download. The model is a photo-inspired artistic interpretation of Pek Kio Community Centre, with simplified school/street context, not a surveyed model or navigation map.
+
+Created with Blender 5.2.1 LTS. Rebuild with `blender --background --python scripts/build_pekkio.py -- /absolute/output/path`. This writes a `.blend`, `.glb`, and transparent `.png`. Convert the PNG to the web poster with sharp. Source reference: [onePA Pek Kio CC](https://www.onepa.gov.sg/cc/pek-kio-cc). The school/CC relationship is documented by [Farrer Park Primary School](https://www.farrerparkpri.moe.edu.sg/partners/pek-kio-cc/). Original modelling code and geometry are in this repository; no third-party 3D assets are included.
+
+The viewer is loaded on demand through Google's `model-viewer`, with a still-picture fallback when WebGL is unavailable. The 3D scene is authored in Blender, not AI-generated.

@@ -3602,3 +3602,191 @@ dialog::backdrop {
     min-height: 180px;
   }
 }
+/* Blender neighbourhood diorama. */
+.scene-stage {
+  position: relative;
+  flex: 1;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #e9eddf;
+  border: 1px solid #dce2d2;
+}
+.scene-canvas {
+  position: absolute;
+  inset: 0;
+}
+.scene-canvas model-viewer {
+  outline: none;
+}
+.scene-corner-label {
+  position: absolute;
+  top: 18px;
+  left: 19px;
+  z-index: 2;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  background: #fffcf0e8;
+  border: 1px solid #e1e4d5;
+  border-radius: 9px;
+  padding: 10px 13px;
+  pointer-events: none;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+}
+.scene-corner-label small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.scene-bottom-overlay {
+  position: absolute;
+  bottom: 13px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 9px;
+  pointer-events: none;
+  color: #546a53;
+}
+.scene-bottom-overlay span {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: #fffdf2d9;
+  border-radius: 7px;
+  padding: 7px 10px;
+}
+.scene-source {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  text-decoration: underline;
+}
+.scene-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding-top: 14px;
+  flex-shrink: 0;
+}
+.scene-presets,
+.scene-downloads {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scene-presets button,
+.scene-downloads a,
+.scene-downloads button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #dbe1d0;
+  border-radius: 20px;
+  padding: 9px 13px;
+  font-size: 10px;
+}
+.scene-presets button[aria-pressed="true"] {
+  background: #dfe8d2;
+  border-color: #a6b694;
+}
+.scene-downloads a {
+  border: 0;
+  padding: 9px 5px;
+}
+.scene-footnote {
+  font-size: 8px;
+  color: var(--muted);
+  margin-top: 11px;
+  line-height: 1.6;
+}
+.scene-view .view-heading {
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .scene-view h1 {
+    font-size: 24px;
+  }
+  .scene-source {
+    font-size: 8px;
+    max-width: 70px;
+    line-height: 1.6;
+  }
+  .scene-view .view-heading {
+    gap: 12px;
+  }
+  .scene-view .view-heading p {
+    display: none;
+  }
+  .scene-view .eyebrow {
+    font-size: 6px;
+  }
+  .scene-stage {
+    min-height: 220px;
+    border-radius: 12px;
+  }
+  .scene-corner-label {
+    top: 10px;
+    left: 10px;
+    font-size: 7px;
+    padding: 8px;
+    gap: 6px;
+  }
+  .scene-corner-label small {
+    font-size: 6px;
+  }
+  .scene-bottom-overlay {
+    left: 9px;
+    right: 9px;
+    bottom: 9px;
+    font-size: 7px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .scene-bottom-overlay span {
+    padding: 5px 7px;
+  }
+  .scene-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-top: 10px;
+  }
+  .scene-presets {
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .scene-presets button {
+    font-size: 8px;
+    padding: 8px;
+    gap: 4px;
+  }
+  .scene-presets svg {
+    width: 11px;
+    height: 11px;
+  }
+  .scene-downloads {
+    justify-content: flex-end;
+  }
+  .scene-downloads a,
+  .scene-downloads button {
+    font-size: 8px;
+    padding: 5px 8px;
+  }
+  .scene-footnote {
+    font-size: 7px;
+    margin-top: 6px;
+  }
+  .tabbar button span {
+    font-size: 6px !important;
+  }
+}

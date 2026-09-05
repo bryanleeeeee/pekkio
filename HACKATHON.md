@@ -47,3 +47,7 @@ Vercel AI Gateway was tested during development but required a payment card. The
 ## Future work to describe as future work
 
 Opt-in resident contributions and moderation; venue-verified opening data; route calculations from a mapping service; multilingual evaluation; and a controlled study of whether residents discover more independent businesses. These are not shipped features.
+
+## Optional visual opening
+
+Open **3D Pek Kio**, immediately beside AI Quest. Rotate the Blender miniature and switch to the street view. Explain that the coral façade is based on the Community Centre reference photo; surrounding buildings are illustrative. This is original Blender modelling, while the separate AI Quest performs real neural semantic matching. Keep those two technologies distinct in the pitch.
