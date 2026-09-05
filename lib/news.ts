@@ -48,7 +48,7 @@ export async function getNews(): Promise<{ stories: Story[]; live: boolean }> {
           new Date(s.date).getTime() <= Date.now(),
       )
       .sort((a: Story, b: Story) => Date.parse(b.date) - Date.parse(a.date))
-      .slice(0, 4);
+      .slice(0, 12);
     return stories.length
       ? { stories, live: true }
       : { stories: fallback, live: false };

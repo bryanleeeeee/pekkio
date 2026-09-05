@@ -45,6 +45,7 @@ function Photograph({
   className?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [photo.src]);
   return (
     <div className={`photograph ${className}`}>
       {failed ? (
@@ -93,6 +94,8 @@ export default function Guide({
   const [page, setPage] = useState(0);
   const [mobile, setMobile] = useState(false);
   const [query, setQuery] = useState("");
+  const [kind, setKind] = useState("All");
+  const [detailTab, setDetailTab] = useState("overview");
   const [audience, setAudience] = useState("Everyone");
   const [saved, setSaved] = useState<string[]>([]);
   const [done, setDone] = useState<string[]>([]);
@@ -120,6 +123,9 @@ export default function Guide({
           : "discover",
       );
       setPage(0);
+      setKind("All");
+      setAudience("Everyone");
+      setQuery("");
     };
     window.addEventListener("hashchange", handleHash);
     try {
@@ -136,8 +142,11 @@ export default function Guide({
     };
   }, []);
   useEffect(() => {
-    if (selected) detail.current?.showModal();
-    else detail.current?.close();
+    setDetailTab("overview");
+    if (selected) {
+      detail.current?.showModal();
+      detail.current?.scrollTo({ top: 0 });
+    } else detail.current?.close();
   }, [selected]);
   useEffect(() => {
     if (credits) creditDialog.current?.showModal();
@@ -153,6 +162,7 @@ export default function Guide({
     setPage(0);
     setQuery("");
     setAudience("Everyone");
+    setKind("All");
     history.pushState(null, "", `#${next}`);
     main.current?.scrollTo({ top: 0 });
   }
@@ -193,13 +203,26 @@ export default function Guide({
     setDone(next);
     persist("pekkio-done-v1", next);
   }
+  const availableKinds = [
+    ...new Set(
+      places
+        .filter(
+          (p) =>
+            (tab !== "food" || p.category === "Food") &&
+            (tab !== "activities" || p.category === "Activities") &&
+            (tab !== "saved" || saved.includes(p.id)),
+        )
+        .map((p) => p.kind),
+    ),
+  ];
   const results = places.filter(
     (p) =>
       (tab !== "food" || p.category === "Food") &&
       (tab !== "activities" || p.category === "Activities") &&
       (tab !== "saved" || saved.includes(p.id)) &&
       (audience === "Everyone" || p.audience.includes(audience)) &&
-      `${p.name} ${p.description} ${p.address}`
+      (kind === "All" || p.kind === kind) &&
+      `${p.name} ${p.description} ${p.address} ${p.kind} ${p.area} ${p.highlights.join(" ")}`
         .toLowerCase()
         .includes(query.toLowerCase()),
   );
@@ -394,8 +417,10 @@ export default function Guide({
             </div>
             <div className="home-bottom">
               <span>
-                <span className="status-dot" /> Real places. A little local
-                know-how.
+                <span className="status-dot" />{" "}
+                {places.filter((p) => p.category === "Food").length} food spots
+                · {places.filter((p) => p.category === "Activities").length}{" "}
+                things to do
               </span>
               <button onClick={() => navigate("news")}>
                 What’s the local buzz? <ArrowRight size={15} />
@@ -477,7 +502,27 @@ export default function Guide({
                   </button>
                 ))}
               </div>
-              <span aria-live="polite">{results.length} discoveries</span>
+              <div className="kind-filter">
+                <label className="sr-only" htmlFor="kind-filter">
+                  Filter by type
+                </label>
+                <select
+                  id="kind-filter"
+                  value={kind}
+                  onChange={(e) => {
+                    setKind(e.target.value);
+                    setPage(0);
+                  }}
+                >
+                  <option value="All">All types</option>
+                  {availableKinds.map((k) => (
+                    <option key={k} value={k}>
+                      {k}
+                    </option>
+                  ))}
+                </select>
+                <span aria-live="polite">{results.length} finds</span>
+              </div>
             </div>
             {results.length ? (
               <div className="place-grid">
@@ -493,6 +538,11 @@ export default function Guide({
                         onClick={() => setSelected(place)}
                       >
                         <Photograph photo={placePhoto(place.id)} />
+                        {placePhoto(place.id).note && (
+                          <span className="context-photo-note">
+                            {placePhoto(place.id).note}
+                          </span>
+                        )}
                       </button>
                       <span className="floating-label">
                         {place.category === "Food" ? "GOOD MAKAN" : "GO & DO"}
@@ -512,7 +562,9 @@ export default function Guide({
                       </button>
                     </div>
                     <div className="card-body">
-                      <span className="eyebrow">{place.tag}</span>
+                      <span className="eyebrow">
+                        {place.kind} · {place.area}
+                      </span>
                       <h2>
                         <button onClick={() => setSelected(place)}>
                           {place.name}
@@ -561,6 +613,7 @@ export default function Guide({
                     else {
                       setQuery("");
                       setAudience("Everyone");
+                      setKind("All");
                     }
                   }}
                 >
@@ -815,15 +868,135 @@ export default function Guide({
                 {selected.category} · {selected.tag}
               </span>
               <h2 id="place-title">{selected.name}</h2>
-              <p>{selected.description}</p>
+              <div className="detail-tabs" aria-label="Place information">
+                <button
+                  aria-pressed={detailTab === "overview"}
+                  onClick={() => setDetailTab("overview")}
+                >
+                  Overview
+                </button>
+                <button
+                  aria-pressed={detailTab === "ideas"}
+                  onClick={() => setDetailTab("ideas")}
+                >
+                  {selected.steps
+                    ? "The itinerary"
+                    : selected.category === "Food"
+                      ? "What to try"
+                      : "Your to-do list"}
+                </button>
+                {selected.review && (
+                  <button
+                    aria-pressed={detailTab === "reviews"}
+                    onClick={() => setDetailTab("reviews")}
+                  >
+                    Reviews & sources
+                  </button>
+                )}
+              </div>
+              {detailTab === "overview" && (
+                <>
+                  <p className="detail-description">{selected.description}</p>
+                  <dl className="quick-facts">
+                    <div>
+                      <dt>Where</dt>
+                      <dd>{selected.area}</dd>
+                    </div>
+                    <div>
+                      <dt>
+                        {selected.category === "Food"
+                          ? "Budget"
+                          : "Entry / booking"}
+                      </dt>
+                      <dd>{selected.cost}</dd>
+                    </div>
+                    <div>
+                      <dt>Plan for</dt>
+                      <dd>{selected.duration}</dd>
+                    </div>
+                  </dl>
+                </>
+              )}
+              {detailTab === "ideas" && (
+                <section className="detail-ideas">
+                  <h3>
+                    {selected.steps
+                      ? "Your suggested route"
+                      : selected.category === "Food"
+                        ? "Start with these"
+                        : "Make a little plan"}
+                  </h3>
+                  {selected.steps ? (
+                    <ol className="itinerary">
+                      {selected.steps.map((step) => (
+                        <li key={step.placeId}>
+                          <button
+                            onClick={() => {
+                              const p = places.find(
+                                (p) => p.id === step.placeId,
+                              );
+                              if (p) setSelected(p);
+                            }}
+                          >
+                            <strong>{step.title}</strong>
+                            <span>{step.detail}</span>
+                            <ArrowUpRight size={16} />
+                          </button>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <ul>
+                      {selected.highlights.map((h) => (
+                        <li key={h}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <small>
+                    Suggested visit times are planning estimates. Allow extra
+                    time for queues and travel.
+                  </small>
+                </section>
+              )}
+              {detailTab === "reviews" && selected.review && (
+                <section className="review-snapshot">
+                  <h3>
+                    {selected.review.publisher === "Old Hen Coffee"
+                      ? "From the café"
+                      : "Review snapshot"}
+                  </h3>
+                  <p>{selected.review.text}</p>
+                  <a
+                    href={selected.review.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {selected.review.publisher}
+                    {selected.review.date
+                      ? " · " +
+                        new Date(selected.review.date).toLocaleDateString(
+                          "en-SG",
+                          { month: "short", year: "numeric" },
+                        )
+                      : ""}{" "}
+                    <ArrowUpRight size={13} />
+                  </a>
+                  <small>
+                    Paraphrased source notes, not our own visit or a live Google
+                    rating.
+                  </small>
+                </section>
+              )}
               <span className="card-address">
                 <MapPin size={15} />
                 {selected.address}
               </span>
-              <div className="tip">
-                <strong>A little local know-how</strong>
-                <p>{selected.tip}</p>
-              </div>
+              {detailTab !== "reviews" && (
+                <div className="tip">
+                  <strong>Before you go</strong>
+                  <p>{selected.tip}</p>
+                </div>
+              )}
               <div className="detail-actions">
                 <a
                   className="button dark"
@@ -855,6 +1028,26 @@ export default function Guide({
                   <ExternalLink size={13} />
                 </a>
               </div>
+              <div className="more-source-links">
+                <a
+                  href={maps(selected.name + " " + selected.address)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Google Maps & visitor reviews <ArrowUpRight size={13} />
+                </a>
+                {selected.booking && (
+                  <a href={selected.booking} target="_blank" rel="noreferrer">
+                    Check bookings <ArrowUpRight size={13} />
+                  </a>
+                )}
+                <span>Sources checked 5 Sep 2026</span>
+              </div>
+              {placePhoto(selected.id).note && (
+                <p className="detail-photo-note">
+                  Photo: {placePhoto(selected.id).note}
+                </p>
+              )}
               <PhotoCredit photo={placePhoto(selected.id)} />
             </div>
           </>
@@ -878,9 +1071,9 @@ export default function Guide({
           <span className="eyebrow">THE REAL PEK KIO</span>
           <h2 id="credits-title">Behind the photographs.</h2>
           <p>
-            Photographs show the actual locations and food. They may predate
-            your visit. Images are cropped to fit; all rights remain with their
-            respective creators.
+            Photos are credited to their sources and may predate your visit.
+            Context images and outlet-unspecified brand photos are labelled.
+            Images are cropped to fit; rights remain with their creators.
           </p>
           {Object.entries(photos).map(([id, photo]) => (
             <div className="credit-row" key={id}>
