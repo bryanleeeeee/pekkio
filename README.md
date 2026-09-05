@@ -35,3 +35,11 @@ News is sourced through Google News RSS; feed availability and index coverage ar
 Deploy the repository to Vercel using the Next.js preset. No environment variables or database are required. Production build: `npm run build`. Framework output is automatically detected.
 
 Review summaries are paraphrases, with publisher links and dates when available. Older reviews are identified; prices, menus and opening status should be checked with the venue. Photo context notes distinguish food/venue images from general location or brand images. Suggested durations and itineraries are editorial planning estimates. Preserve existing place IDs when updating content so saved lists continue to work.
+
+## Kampung Quest (hackathon experience)
+
+The AI Quest tab uses a quantized MiniLM semantic embedding model through Transformers.js in a Web Worker. No server inference, API key or AI Gateway billing is required. The model is loaded only when the visitor selects **Make my AI trail**. It ranks 23 individual places; explicit rules apply time, spending and shelter constraints. A clearly labelled instant curated mode is available without model download.
+
+The latest trail and self-marked passport are persisted on-device. Share links include a validated list of up to three known place IDs; prompts and passport data are not included. The illustrated stop sequence is not a map and transfer allowances are estimates. Read `HACKATHON.md` for the demo script, architecture and honest limitations. The model card is linked inside the AI explanation dialog.
+
+The AI library has pinned transitive overrides for patched `sharp` and `adm-zip` versions. Run `npm audit` after dependency updates. Source content remains in `lib/places.ts`; the worker receives a compact corpus from `lib/quest.ts`.

@@ -1,6 +1,10 @@
 "use client";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+const Quest = dynamic(() => import("./quest"), {
+  loading: () => <p>Opening your little adventure…</p>,
+});
 import {
   ArrowUpRight,
   ArrowRight,
@@ -27,6 +31,7 @@ import { photos, placePhoto, type Photo } from "@/lib/photos";
 import type { Story } from "@/lib/news";
 const tabs = [
   { id: "discover", label: "Discover", Icon: Compass },
+  { id: "quest", label: "AI Quest", Icon: Sparkles },
   { id: "food", label: "Good food", Icon: Utensils },
   { id: "activities", label: "Go & do", Icon: Sun },
   { id: "news", label: "Local buzz", Icon: Newspaper },
@@ -321,6 +326,7 @@ export default function Guide({
             : tabs.find((t) => t.id === tab)?.label
         }
       >
+        {tab === "quest" && <Quest onPlace={setSelected} />}
         {tab === "discover" && (
           <div className="view home-view" key="discover">
             <div className="view-heading">
@@ -339,13 +345,13 @@ export default function Guide({
               </div>
               <button
                 className="welcome-pill"
-                onClick={() => navigate("welcome")}
+                onClick={() => navigate("quest")}
               >
                 <Sparkles size={18} />
                 <span>
-                  Just moved in?
+                  YOUR OWN LITTLE ADVENTURE
                   <strong>
-                    Let’s make you feel at home <ArrowRight size={14} />
+                    Make my AI trail <ArrowRight size={14} />
                   </strong>
                 </span>
               </button>
@@ -366,9 +372,9 @@ export default function Guide({
                   <p>The real heart of Pek Kio, one breakfast at a time.</p>
                   <button
                     className="button cream"
-                    onClick={() => navigate("food")}
+                    onClick={() => navigate("quest")}
                   >
-                    Find your next favourite <ArrowUpRight size={18} />
+                    Find my little adventure <ArrowUpRight size={18} />
                   </button>
                 </div>
                 <span className="photo-label">
