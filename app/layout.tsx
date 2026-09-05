@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { DM_Sans, Manrope } from "next/font/google";
 import "./globals.css";
+const dm = DM_Sans({ subsets: ["latin"], variable: "--font-dm" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 export const metadata: Metadata = {
-  title: "Pek Kio — A little neighbourhood. A lot to love.",
+  title: "Pek Kio — Your neighbourhood, discovered.",
   description:
-    "Your friendly guide to Pek Kio, Singapore. Discover hawker favourites, things to do, community news and a fresh start in your neighbourhood.",
+    "Real places, good food and local stories. Explore Pek Kio through your friendly neighbourhood guide.",
 };
 export default function RootLayout({
   children,
@@ -11,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-SG">
+    <html lang="en-SG" className={`${dm.variable} ${manrope.variable}`}>
       <body>{children}</body>
     </html>
   );

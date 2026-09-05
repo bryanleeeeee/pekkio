@@ -21,7 +21,8 @@ Use Node.js 24 LTS.
 - Favourites and resident checklist stored locally on the visitor's device. No account or personal data collection.
 - Google News RSS fetched server-side, revalidated hourly, sorted by publication date. On timeout, invalid data or upstream failure, a clearly labelled dated editorial fallback is displayed.
 - Responsive layout, keyboard-operable native modal, labelled controls, skip link and reduced-motion support.
-- Original inline SVG neighbourhood artwork and illustrative emoji cards; these are not venue photographs.
+- A viewport-sized tabbed interface with paginated cards, keyboard tab navigation and deep links. Main content fits common desktop and phone sizes; short viewports and zoom retain an accessible internal overflow area.
+- Real photographs of Pek Kio Market, Pin Wei, Wah Kee and Pek Kio CC, rendered with Next.js image optimisation. See `lib/photos.ts` and the in-app Photo credits dialog for source and licence details. Remote photos have an explicit unavailable state if an upstream host fails.
 
 ## Content maintenance
 

@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import Image from "next/image";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -12,149 +13,75 @@ import {
   Newspaper,
   X,
   Check,
-  Menu,
+  ChevronLeft,
+  ChevronRight,
   TrainFront,
   Sparkles,
+  Home,
+  Camera,
+  ImageOff,
+  ExternalLink,
 } from "lucide-react";
 import { places, type Place } from "@/lib/places";
+import { photos, placePhoto, type Photo } from "@/lib/photos";
 import type { Story } from "@/lib/news";
+const tabs = [
+  { id: "discover", label: "Discover", Icon: Compass },
+  { id: "food", label: "Good food", Icon: Utensils },
+  { id: "activities", label: "Go & do", Icon: Sun },
+  { id: "news", label: "Local buzz", Icon: Newspaper },
+  { id: "welcome", label: "New here?", Icon: Home },
+] as const;
+type Tab = (typeof tabs)[number]["id"] | "saved";
 const maps = (address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address + " Singapore")}`;
-function Neighbourhood() {
+function Photograph({
+  photo,
+  priority = false,
+  className = "",
+}: {
+  photo: Photo;
+  priority?: boolean;
+  className?: string;
+}) {
+  const [failed, setFailed] = useState(false);
   return (
-    <svg
-      viewBox="0 0 650 460"
-      role="img"
-      aria-label="A playful illustration of Pek Kio: pastel flats, a hawker centre, leafy trees and neighbours"
-    >
-      <defs>
-        <pattern
-          id="windows"
-          width="36"
-          height="43"
-          patternUnits="userSpaceOnUse"
-        >
-          <rect x="9" y="9" width="15" height="23" rx="3" fill="#fcf4dd" />
-          <path d="M16 10v21" stroke="#bd877a" strokeWidth="2" />
-        </pattern>
-      </defs>
-      <circle cx="348" cy="232" r="195" fill="#e5e9ce" />
-      <g fill="#fffdf2">
-        <path d="M40 113c-13-28 26-46 43-25 23-38 65-10 56 15 24 0 28 22 13 25H43z" />
-        <path d="M455 65c-10-23 20-35 34-19 18-30 52-8 44 12 23-1 24 19 10 20h-85z" />
-      </g>
-      <circle cx="527" cy="131" r="35" fill="#ffcb68" />
-      <g stroke="#edaf46" strokeWidth="3" strokeLinecap="round">
-        <path d="M527 82v-9m0 116v-9m49-49h9m-116 0h9m85-36 7-7m-85 85 7-7" />
-      </g>
-      <ellipse cx="336" cy="402" rx="284" ry="35" fill="#d5dec0" />
-      <path
-        d="M93 390c120-62 261-33 410 27"
-        fill="none"
-        stroke="#fff8e9"
-        strokeWidth="32"
-      />
-      <g transform="translate(357 109) rotate(3)">
-        <rect width="139" height="263" rx="7" fill="#c4b8d8" />
-        <rect x="10" y="12" width="119" height="234" fill="url(#windows)" />
-        <path d="M-8 0h155v14H-8z" fill="#a799bf" />
-        <rect x="59" y="208" width="24" height="55" rx="4" fill="#786f92" />
-      </g>
-      <g transform="translate(210 71) rotate(-3)">
-        <rect width="155" height="300" rx="8" fill="#eca895" />
-        <rect x="12" y="20" width="130" height="255" fill="url(#windows)" />
-        <path d="M-8 0h171v15H-8z" fill="#d78878" />
-        <rect x="14" y="125" width="127" height="8" fill="#d98b7c" />
-        <rect x="14" y="214" width="127" height="8" fill="#d98b7c" />
-        <rect x="62" y="255" width="31" height="45" fill="#a66d62" />
-      </g>
-      <g transform="translate(86 261)">
-        <rect x="0" y="0" width="278" height="117" rx="5" fill="#f6e5b6" />
-        <path d="M-17 4 15-25h242l35 29" fill="#427461" />
-        <rect x="17" y="16" width="244" height="30" rx="4" fill="#fff8e7" />
-        <text
-          x="139"
-          y="37"
-          textAnchor="middle"
-          fill="#315845"
-          fontSize="14"
-          fontFamily="Arial"
-          fontWeight="bold"
-          letterSpacing="2"
-        >
-          PEK KIO MARKET
-        </text>
-        <path d="M10 55h258v15H10z" fill="#e4937f" />
-        {[16, 57, 98, 139, 180, 221].map((x) => (
-          <g key={x}>
-            <path d={`M${x} 55h24l5 17h-34z`} fill="#fff3d8" />
-            <rect x={x} y="77" width="29" height="40" fill="#55695a" />
-          </g>
-        ))}
-        <path
-          d="M-8 118h294"
-          stroke="#cdbd99"
-          strokeWidth="7"
-          strokeLinecap="round"
+    <div className={`photograph ${className}`}>
+      {failed ? (
+        <div className="photo-fallback">
+          <ImageOff />
+          <span>Photo unavailable</span>
+        </div>
+      ) : (
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          fill
+          sizes="(max-width: 700px) 100vw, 60vw"
+          priority={priority}
+          onError={() => setFailed(true)}
         />
-      </g>
-      <g stroke="#7e7850" strokeWidth="8" strokeLinecap="round">
-        <path d="M73 341V208m0 60-25-29m25 11 23-27M533 365V249m0 35 22-26" />
-      </g>
-      <g fill="#719b72">
-        <circle cx="53" cy="214" r="36" />
-        <circle cx="87" cy="197" r="44" />
-        <circle cx="97" cy="235" r="31" />
-        <circle cx="515" cy="237" r="37" />
-        <circle cx="549" cy="226" r="33" />
-        <circle cx="554" cy="255" r="29" />
-      </g>
-      <g fill="#93b285">
-        <circle cx="63" cy="192" r="24" />
-        <circle cx="536" cy="218" r="24" />
-      </g>
-      <g transform="translate(428 334)">
-        <circle cx="0" cy="0" r="10" fill="#bc8060" />
-        <path d="M-12 16q12-10 24 0l4 28h-32z" fill="#f1b054" />
-        <path
-          d="M-7 44v25m14-25 7 25"
-          stroke="#516558"
-          strokeWidth="7"
-          strokeLinecap="round"
-        />
-        <path
-          d="m-12 18-12 18m36-18 17 7"
-          stroke="#bc8060"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-      </g>
-      <g transform="translate(474 342)">
-        <circle r="9" fill="#946445" />
-        <path d="M-11 14h22l6 30h-34z" fill="#d6aad0" />
-        <path
-          d="M-6 44v19m13-19 4 19"
-          stroke="#61664e"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-      </g>
-      <g transform="translate(149 381)">
-        <ellipse cx="0" cy="10" rx="19" ry="9" fill="#e1a96b" />
-        <circle cx="16" cy="0" r="9" fill="#e1a96b" />
-        <path
-          d="m10-5 0-10 8 8m-29 18q-20-17-17 0"
-          fill="none"
-          stroke="#cf9056"
-          strokeWidth="5"
-        />
-        <circle cx="19" cy="0" r="1.5" />
-      </g>
-      <g fill="#f7fbef">
-        <path d="m179 182 5 11 12 4-12 4-5 12-4-12-12-4 12-4z" />
-        <path d="m576 326 4 9 10 4-10 4-4 9-4-9-9-4 9-4z" />
-      </g>
-    </svg>
+      )}
+    </div>
+  );
+}
+function PhotoCredit({ photo }: { photo: Photo }) {
+  return (
+    <span className="photo-credit">
+      <Camera size={11} />
+      <a href={photo.source} target="_blank" rel="noreferrer">
+        {photo.credit}
+      </a>
+      {photo.license && (
+        <>
+          {" "}
+          ·{" "}
+          <a href={photo.licenseUrl} target="_blank" rel="noreferrer">
+            {photo.license}
+          </a>
+        </>
+      )}
+    </span>
   );
 }
 export default function Guide({
@@ -162,41 +89,91 @@ export default function Guide({
 }: {
   news: { stories: Story[]; live: boolean };
 }) {
-  const [category, setCategory] = useState("All");
-  const [audience, setAudience] = useState("Everyone");
+  const [tab, setTab] = useState<Tab>("discover");
+  const [page, setPage] = useState(0);
+  const [mobile, setMobile] = useState(false);
   const [query, setQuery] = useState("");
+  const [audience, setAudience] = useState("Everyone");
   const [saved, setSaved] = useState<string[]>([]);
-  const [savedOnly, setSavedOnly] = useState(false);
-  const [selected, setSelected] = useState<Place | null>(null);
-  const [menu, setMenu] = useState(false);
   const [done, setDone] = useState<string[]>([]);
+  const [selected, setSelected] = useState<Place | null>(null);
+  const [credits, setCredits] = useState(false);
   const [notice, setNotice] = useState("");
-  const dialog = useRef<HTMLDialogElement>(null);
+  const detail = useRef<HTMLDialogElement>(null);
+  const creditDialog = useRef<HTMLDialogElement>(null);
+  const main = useRef<HTMLElement>(null);
   useEffect(() => {
+    const media = matchMedia("(max-width: 700px)");
+    const update = () => {
+      setMobile(media.matches);
+      setPage(0);
+    };
+    update();
+    media.addEventListener("change", update);
+    const hash = location.hash.slice(1);
+    if ([...tabs.map((t) => t.id), "saved"].includes(hash)) setTab(hash as Tab);
+    const handleHash = () => {
+      const t = location.hash.slice(1);
+      setTab(
+        [...tabs.map((x) => x.id), "saved"].includes(t)
+          ? (t as Tab)
+          : "discover",
+      );
+      setPage(0);
+    };
+    window.addEventListener("hashchange", handleHash);
     try {
       const s = JSON.parse(localStorage.getItem("pekkio-saved-v1") || "[]");
       const d = JSON.parse(localStorage.getItem("pekkio-done-v1") || "[]");
-      if (Array.isArray(s)) setSaved(s.filter((x) => typeof x === "string"));
-      if (Array.isArray(d)) setDone(d.filter((x) => typeof x === "string"));
+      if (Array.isArray(s))
+        setSaved(s.filter((id) => places.some((p) => p.id === id)));
+      if (Array.isArray(d))
+        setDone(d.filter((id) => ["breakfast", "walk", "hello"].includes(id)));
     } catch {}
+    return () => {
+      media.removeEventListener("change", update);
+      window.removeEventListener("hashchange", handleHash);
+    };
   }, []);
   useEffect(() => {
-    if (selected) dialog.current?.showModal();
-    else dialog.current?.close();
+    if (selected) detail.current?.showModal();
+    else detail.current?.close();
   }, [selected]);
   useEffect(() => {
-    if (notice) {
-      const timer = setTimeout(() => setNotice(""), 2500);
-      return () => clearTimeout(timer);
-    }
+    if (credits) creditDialog.current?.showModal();
+    else creditDialog.current?.close();
+  }, [credits]);
+  useEffect(() => {
+    if (!notice) return;
+    const timer = setTimeout(() => setNotice(""), 2400);
+    return () => clearTimeout(timer);
   }, [notice]);
-  const persist = (key: string, value: string[]) => {
+  function navigate(next: Tab) {
+    setTab(next);
+    setPage(0);
+    setQuery("");
+    setAudience("Everyone");
+    history.pushState(null, "", `#${next}`);
+    main.current?.scrollTo({ top: 0 });
+  }
+  function keyboard(e: KeyboardEvent<HTMLButtonElement>, i: number) {
+    let index = i;
+    if (e.key === "ArrowRight") index = (i + 1) % tabs.length;
+    else if (e.key === "ArrowLeft") index = (i - 1 + tabs.length) % tabs.length;
+    else if (e.key === "Home") index = 0;
+    else if (e.key === "End") index = tabs.length - 1;
+    else return;
+    e.preventDefault();
+    navigate(tabs[index].id);
+    document.getElementById(`tab-${tabs[index].id}`)?.focus();
+  }
+  function persist(key: string, value: string[]) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch {
-      setNotice("Storage unavailable. Your choices will last for this visit.");
+      setNotice("Saved for this visit. Device storage is unavailable.");
     }
-  };
+  }
   function save(id: string) {
     const next = saved.includes(id)
       ? saved.filter((x) => x !== id)
@@ -205,527 +182,620 @@ export default function Guide({
     persist("pekkio-saved-v1", next);
     setNotice(
       next.includes(id)
-        ? "Added to your little local list ♥"
-        : "Removed from your saved places",
+        ? "Added to your little local list"
+        : "Removed from saved places",
     );
   }
-  function discover(value = "All", only = false) {
-    setCategory(value);
-    setSavedOnly(only);
-    setMenu(false);
-    document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
+  function toggleDone(id: string) {
+    const next = done.includes(id)
+      ? done.filter((x) => x !== id)
+      : [...done, id];
+    setDone(next);
+    persist("pekkio-done-v1", next);
   }
   const results = places.filter(
     (p) =>
-      (category === "All" || p.category === category) &&
+      (tab !== "food" || p.category === "Food") &&
+      (tab !== "activities" || p.category === "Activities") &&
+      (tab !== "saved" || saved.includes(p.id)) &&
       (audience === "Everyone" || p.audience.includes(audience)) &&
-      (!savedOnly || saved.includes(p.id)) &&
-      `${p.name} ${p.tag} ${p.description} ${p.address}`
+      `${p.name} ${p.description} ${p.address}`
         .toLowerCase()
         .includes(query.toLowerCase()),
   );
+  const size = mobile ? 1 : 3;
+  const pageCount = Math.ceil(results.length / size);
+  const activePage = Math.min(page, Math.max(0, pageCount - 1));
+  const displayed = results.slice(activePage * size, (activePage + 1) * size);
+  const newsSize = mobile ? 2 : 4;
+  const newsPageCount = Math.ceil(news.stories.length / newsSize);
+  const newsPage = Math.min(page, Math.max(0, newsPageCount - 1));
+  function pager(total: number, current: number, label: string) {
+    return (
+      <div className="pager">
+        <span>{label}</span>
+        <div>
+          <button
+            disabled={current === 0}
+            aria-label="Previous page"
+            onClick={() => setPage(current - 1)}
+          >
+            <ChevronLeft size={17} />
+          </button>
+          <span aria-live="polite">
+            {total ? current + 1 : 0} / {total}
+          </span>
+          <button
+            disabled={current >= total - 1}
+            aria-label="Next page"
+            onClick={() => setPage(current + 1)}
+          >
+            <ChevronRight size={17} />
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
-    <>
-      <a className="skip" href="#main">
+    <div className="app-shell">
+      <a href="#panel" className="skip">
         Skip to content
       </a>
-      <header>
-        <a className="brand" href="#" aria-label="Pek Kio home">
-          <span className="brand-icon">
-            pk<span>✳</span>
+      <header className="topbar">
+        <button
+          className="brand"
+          onClick={() => navigate("discover")}
+          aria-label="Pek Kio home"
+        >
+          <span className="brand-mark">
+            pk<i>✳</i>
           </span>
           <span>
-            pek kio
-            <span className="brand-sub">YOUR NEIGHBOURHOOD, DISCOVERED.</span>
+            pek kio<small>YOUR NEIGHBOURHOOD, DISCOVERED.</small>
           </span>
-        </a>
-        <nav aria-label="Main navigation" className={menu ? "open" : ""}>
-          <a href="#explore" onClick={() => discover()}>
-            Explore
-          </a>
-          <a href="#explore" onClick={() => discover("Food")}>
-            Good food
-          </a>
-          <a href="#explore" onClick={() => discover("Activities")}>
-            Things to do
-          </a>
-          <a href="#news" onClick={() => setMenu(false)}>
-            The local buzz
-          </a>
-        </nav>
+        </button>
+        <span className="location-badge">
+          <MapPin size={14} /> A little corner of Singapore <span>·</span> A lot
+          to love
+        </span>
         <button
-          className="saved-button"
-          aria-label="View my saved places"
-          onClick={() => discover("All", true)}
+          className={`saved-button ${tab === "saved" ? "active" : ""}`}
+          onClick={() => navigate("saved")}
+          aria-label={`View saved places, ${saved.length} saved`}
         >
-          <Heart size={17} /> <span>My little list</span>
+          <Heart size={17} />
+          <span>My little list</span>
           <b>{saved.length}</b>
         </button>
-        <button
-          className="menu"
-          aria-label="Toggle navigation"
-          aria-expanded={menu}
-          onClick={() => setMenu(!menu)}
-        >
-          <Menu />
-        </button>
       </header>
-      <main id="main">
-        <section className="hero">
-          <div className="hero-copy">
-            <span className="eyebrow">
-              <span className="little-sun">✳</span> SMALL NEIGHBOURHOOD. BIG
-              HEART.
-            </span>
-            <h1>
-              A little corner.
-              <br />A whole lot
-              <br />
-              to{" "}
-              <span className="love">
-                love.
-                <svg viewBox="0 0 250 20" aria-hidden="true">
-                  <path
-                    d="M4 12Q110-3 243 10M30 18q105-9 183-1"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-              <span className="hero-star">✳</span>
-            </h1>
-            <p>
-              Good makan. Great company. Everyday discoveries.
-              <br className="desktop" /> Get to know Pek Kio, one little
-              adventure at a time.
-            </p>
-            <div className="hero-actions">
-              <a className="button dark" href="#explore">
-                Find your next favourite <ArrowUpRight size={19} />
-              </a>
-              <a className="text-link" href="#new-here">
-                New here? Start here <ArrowRight size={16} />
-              </a>
-            </div>
-            <div className="hero-foot">
-              <span className="avatar-stack">
-                <i>☺</i>
-                <i>☺</i>
-                <i>☺</i>
-              </span>
-              <span>
-                For the old kakis.
-                <br />
-                <strong>And the new kids on the block.</strong>
-              </span>
-            </div>
-          </div>
-          <div className="hero-art">
-            <div className="art-note note-top">📍 Right here in Singapore</div>
-            <Neighbourhood />
-            <div className="art-note note-bottom">
-              Made of good food & good neighbours <Heart size={15} />
-            </div>
-            <span className="hand-note">your next happy place ↗</span>
-          </div>
-        </section>
-        <div className="ribbon">
-          <span>GOOD FOOD</span>✳<span>FAMILIAR FACES</span>✳
-          <span>HIDDEN GEMS</span>✳<span>KAMPUNG SPIRIT</span>✳
-          <span>YOUR KIND OF PLACE</span>✳
-        </div>
-        <section id="explore" className="section">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">STEP OUT. GET CURIOUS.</span>
-              <h2>
-                What’s your kind of day? <span className="tiny-spark">✧</span>
-              </h2>
-              <p>A good bite, a new hobby, or simply somewhere to belong.</p>
-            </div>
-            <span className="hand-note desktop">
-              There’s a little something for everyone.
-            </span>
-          </div>
-          <div className="category-grid">
-            {[
-              {
-                name: "All",
-                title: "A bit of everything",
-                subtitle: "Let the neighbourhood surprise you",
-                Icon: Compass,
-                color: "mint",
-              },
-              {
-                name: "Food",
-                title: "Eat your heart out",
-                subtitle: "Hawker heroes & everyday favourites",
-                Icon: Utensils,
-                color: "peach",
-              },
-              {
-                name: "Activities",
-                title: "Make a day of it",
-                subtitle: "Get moving, get creative, get together",
-                Icon: Sun,
-                color: "lavender",
-              },
-            ].map(({ name, title, subtitle, Icon, color }) => (
-              <button
-                key={name}
-                className={`category ${color} ${category === name ? "active" : ""}`}
-                onClick={() => {
-                  setCategory(name);
-                  setSavedOnly(false);
-                }}
-                aria-pressed={category === name && !savedOnly}
-              >
-                <Icon size={27} />
-                <span>
-                  <strong>{title}</strong>
-                  <small>{subtitle}</small>
+      <nav className="tabbar" role="tablist" aria-label="Neighbourhood guide">
+        {tabs.map(({ id, label, Icon }, i) => (
+          <button
+            key={id}
+            id={`tab-${id}`}
+            role="tab"
+            aria-selected={tab === id}
+            aria-controls="panel"
+            tabIndex={tab === id || (tab === "saved" && i === 0) ? 0 : -1}
+            onKeyDown={(e) => keyboard(e, i)}
+            onClick={() => navigate(id)}
+            className={tab === id ? "active" : ""}
+          >
+            <Icon size={18} />
+            <span>{label}</span>
+          </button>
+        ))}
+      </nav>
+      <main
+        ref={main}
+        id="panel"
+        tabIndex={-1}
+        className={`workspace ${tab}`}
+        role="tabpanel"
+        aria-label={
+          tab === "saved"
+            ? "Saved places"
+            : tabs.find((t) => t.id === tab)?.label
+        }
+      >
+        {tab === "discover" && (
+          <div className="view home-view" key="discover">
+            <div className="view-heading">
+              <div>
+                <span className="eyebrow">
+                  <span className="sunflower">✳</span> SMALL NEIGHBOURHOOD. BIG
+                  HEART.
                 </span>
-                <ArrowUpRight size={21} />
-              </button>
-            ))}
-          </div>
-          <div className="discovery-bar">
-            <div>
-              <h3>
-                {savedOnly
-                  ? "Your little local list"
-                  : category === "Food"
-                    ? "Good food, happy mood"
-                    : category === "Activities"
-                      ? "Go on, try something new"
-                      : "The neighbourhood shortlist"}
-              </h3>
-              <span>
-                {savedOnly
-                  ? "Saved on this device. Ready when you are."
-                  : "Handpicked places. Plenty of Pek Kio personality."}
-              </span>
-            </div>
-            <div className="search">
-              <Search size={18} />
-              <input
-                aria-label="Search places"
-                placeholder="Find your kind of good…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              {query && (
-                <button aria-label="Clear search" onClick={() => setQuery("")}>
-                  <X size={16} />
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="filter-row">
-            <div className="pills" aria-label="Filter by audience">
-              {["Everyone", "Youths", "Adults"].map((a) => (
-                <button
-                  key={a}
-                  aria-pressed={a === audience}
-                  className={a === audience ? "chosen" : ""}
-                  onClick={() => setAudience(a)}
-                >
-                  {a}
-                </button>
-              ))}
-            </div>
-            <span aria-live="polite">
-              {results.length} little discoveries
-              {savedOnly && (
-                <button
-                  className="inline-button"
-                  onClick={() => setSavedOnly(false)}
-                >
-                  Show all
-                </button>
-              )}
-            </span>
-          </div>
-          <div className="places-grid">
-            {results.map((place, i) => (
-              <article
-                className="place-card"
-                key={place.id}
-                style={{ animationDelay: `${i * 45}ms` }}
+                <h1>
+                  Same streets. <em>New favourites.</em>
+                </h1>
+                <p>
+                  Good makan, familiar faces, and a little adventure around the
+                  corner.
+                </p>
+              </div>
+              <button
+                className="welcome-pill"
+                onClick={() => navigate("welcome")}
               >
-                <div className={`place-visual ${place.color}`}>
-                  <span className="card-label">
-                    {place.category === "Food" ? "GOOD MAKAN" : "GO & DO"}
-                  </span>
+                <Sparkles size={18} />
+                <span>
+                  Just moved in?
+                  <strong>
+                    Let’s make you feel at home <ArrowRight size={14} />
+                  </strong>
+                </span>
+              </button>
+            </div>
+            <div className="home-grid">
+              <div className="hero-photo">
+                <Photograph photo={photos.stalls} priority />
+                <span className="floating-label">
+                  <MapPin size={13} /> PEK KIO, SINGAPORE
+                </span>
+                <div className="hero-overlay">
+                  <span className="eyebrow">YOUR NEXT HAPPY PLACE</span>
+                  <h2>
+                    Come for the food.
+                    <br />
+                    Stay for the feeling.
+                  </h2>
+                  <p>The real heart of Pek Kio, one breakfast at a time.</p>
                   <button
-                    className={`heart ${saved.includes(place.id) ? "is-saved" : ""}`}
-                    aria-label={`${saved.includes(place.id) ? "Unsave" : "Save"} ${place.name}`}
-                    aria-pressed={saved.includes(place.id)}
-                    onClick={() => save(place.id)}
+                    className="button cream"
+                    onClick={() => navigate("food")}
                   >
-                    <Heart
-                      size={19}
-                      fill={saved.includes(place.id) ? "currentColor" : "none"}
-                    />
-                  </button>
-                  <span className="food-doodle" aria-hidden="true">
-                    {place.emoji}
-                  </span>
-                  <span className="doodle-star star-one">✦</span>
-                  <span className="doodle-star star-two">✧</span>
-                  <span className="visual-caption">{place.tag}</span>
-                </div>
-                <div className="card-body">
-                  <span className="location">
-                    <MapPin size={13} />
-                    {place.address.split(",")[0]}
-                  </span>
-                  <h3>
-                    <button onClick={() => setSelected(place)}>
-                      {place.name}
-                      <ArrowUpRight size={20} />
-                    </button>
-                  </h3>
-                  <p>{place.description}</p>
-                  <button
-                    className="card-link"
-                    onClick={() => setSelected(place)}
-                  >
-                    Take a little look <ArrowRight size={16} />
+                    Find your next favourite <ArrowUpRight size={18} />
                   </button>
                 </div>
-              </article>
-            ))}
-          </div>
-          {results.length === 0 && (
-            <div className="empty">
-              <span>🔎</span>
-              <h3>
-                {savedOnly
-                  ? "Your next favourite is out there."
-                  : "No discoveries just yet."}
-              </h3>
-              <p>
-                {savedOnly
-                  ? "Tap a heart on any place to keep it here."
-                  : "Try another search or give all the categories a go."}
-              </p>
-              <button
-                className="button dark"
-                onClick={() => {
-                  setQuery("");
-                  setAudience("Everyone");
-                  setCategory("All");
-                  setSavedOnly(false);
-                }}
-              >
-                Explore all places <ArrowRight size={17} />
-              </button>
-            </div>
-          )}
-        </section>
-        <section id="new-here" className="new-here">
-          <div className="welcome-copy">
-            <span className="eyebrow">JUST MOVED IN?</span>
-            <h2>
-              Hey neighbour.
-              <br />
-              You’re home. <span>☀</span>
-            </h2>
-            <p>
-              New keys, new streets, new favourite breakfast.
-              <br />
-              Let’s make this place feel a little more like yours.
-            </p>
-            <a
-              href={maps("Pek Kio Market and Food Centre")}
-              target="_blank"
-              rel="noreferrer"
-              className="button dark"
-            >
-              Get your bearings <MapPin size={17} />
-            </a>
-            <small>
-              <TrainFront size={15} /> Farrer Park MRT is a nearby starting
-              point.
-            </small>
-          </div>
-          <div className="checklist">
-            <div className="checklist-title">
-              <span>YOUR FIRST LITTLE ADVENTURES</span>
-              <span>{done.length}/3</span>
-            </div>
-            {[
-              {
-                id: "breakfast",
-                title: "Find your go-to breakfast",
-                text: "Start with a wander around Pek Kio Market.",
-              },
-              {
-                id: "walk",
-                title: "Take the long way home",
-                text: "Get familiar with Cambridge and Dorset Roads.",
-              },
-              {
-                id: "hello",
-                title: "Say your first hello",
-                text: "Drop by the CC or Residents’ Network.",
-              },
-            ].map((item, i) => (
-              <button
-                className={`check-item ${done.includes(item.id) ? "complete" : ""}`}
-                key={item.id}
-                onClick={() => {
-                  const next = done.includes(item.id)
-                    ? done.filter((x) => x !== item.id)
-                    : [...done, item.id];
-                  setDone(next);
-                  persist("pekkio-done-v1", next);
-                }}
-                aria-pressed={done.includes(item.id)}
-              >
-                <span className="check-box">
-                  {done.includes(item.id) ? (
-                    <Check size={18} />
-                  ) : (
-                    String(i + 1).padStart(2, "0")
-                  )}
+                <span className="photo-label">
+                  Pek Kio Market · photographed 2025
                 </span>
-                <span>
-                  <strong>{item.title}</strong>
-                  <small>{item.text}</small>
-                </span>
-              </button>
-            ))}
-            <div className="checklist-foot">
-              {done.length === 3
-                ? "Look at you, already a local! ✨"
-                : "No rush. The best discoveries happen at your pace."}
-            </div>
-          </div>
-        </section>
-        <section id="news" className="section news-section">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">AROUND THE BLOCK</span>
-              <h2>
-                The local buzz <span>↗</span>
-              </h2>
-              <p>Little updates that keep you in the loop.</p>
-            </div>
-            <a
-              className="text-link"
-              href="https://moulmein-cairnhill.pa.gov.sg/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Community updates <ArrowUpRight size={17} />
-            </a>
-          </div>
-          <div className="news-layout">
-            <a
-              className="community-card"
-              href="https://www.onepa.gov.sg/cc/pek-kio-cc"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="eyebrow">MEET YOUR COMMUNITY</span>
-              <div className="community-art" aria-hidden="true">
-                ☺ <span>✳</span> ☺
               </div>
-              <h3>
-                Good things happen
-                <br />
-                when we get together.
-              </h3>
-              <p>
-                Find current courses, facilities and ways to join in at Pek Kio
-                CC.
-              </p>
-              <span className="text-link">
-                See what’s on at onePA <ArrowUpRight size={18} />
-              </span>
-            </a>
-            <div>
-              <div className="feed-label">
-                <span className="status-dot" />
-                {news.live
-                  ? "Latest indexed stories · refreshed hourly"
-                  : "From the reading list · live feed unavailable"}
-              </div>
-              {news.stories.map((story) => (
-                <a
-                  className="news-item"
-                  href={story.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  key={story.url}
+              <div className="home-side">
+                <button
+                  className="teaser peach"
+                  onClick={() => {
+                    navigate("food");
+                    setSelected(places[0]);
+                  }}
                 >
+                  <Photograph photo={photos["pin-wei"]} />
                   <div>
-                    <span>
-                      {story.source} ·{" "}
-                      {new Date(story.date).toLocaleDateString("en-SG", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                        timeZone: "Asia/Singapore",
-                      })}
+                    <span className="eyebrow">ON THE MENU</span>
+                    <h3>
+                      Meet your new
+                      <br />
+                      breakfast obsession.
+                    </h3>
+                    <span className="teaser-bottom">
+                      Pin Wei Chee Cheong Fun <ArrowUpRight size={19} />
                     </span>
-                    <h3>{story.title}</h3>
-                    <small>Read the full story</small>
                   </div>
-                  <ArrowUpRight size={22} />
-                </a>
-              ))}
-              <p className="feed-note">
-                Stories link to their publishers. Dates reflect publication, not
-                the date of an event.
-              </p>
+                </button>
+                <button
+                  className="teaser lavender"
+                  onClick={() => navigate("activities")}
+                >
+                  <Photograph photo={photos.cc} />
+                  <div>
+                    <span className="eyebrow">MAKE A DAY OF IT</span>
+                    <h3>
+                      More good times.
+                      <br />
+                      More good company.
+                    </h3>
+                    <span className="teaser-bottom">
+                      Find your people at Pek Kio CC <ArrowUpRight size={19} />
+                    </span>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div className="home-bottom">
+              <span>
+                <span className="status-dot" /> Real places. A little local
+                know-how.
+              </span>
+              <button onClick={() => navigate("news")}>
+                What’s the local buzz? <ArrowRight size={15} />
+              </button>
             </div>
           </div>
-        </section>
-        <section className="closing">
-          <Sparkles size={25} />
-          <h2>
-            Same neighbourhood.
-            <br />A new little discovery, every day.
-          </h2>
-          <p>Go on. Your next favourite might be just around the corner.</p>
-          <a href="#explore" className="button dark">
-            Let’s explore <ArrowUpRight size={18} />
-          </a>
-        </section>
+        )}
+        {["food", "activities", "saved"].includes(tab) && (
+          <div className="view browse-view" key={tab}>
+            <div className="view-heading">
+              <div>
+                <span className="eyebrow">
+                  {tab === "food"
+                    ? "GOOD MAKAN, GREAT MOOD"
+                    : tab === "activities"
+                      ? "STEP OUT. GET CURIOUS."
+                      : "YOUR FAVOURITES, ALL TOGETHER"}
+                </span>
+                <h1>
+                  {tab === "food" ? (
+                    <>
+                      Eat your <em>heart out.</em>
+                    </>
+                  ) : tab === "activities" ? (
+                    <>
+                      Make a little <em>day of it.</em>
+                    </>
+                  ) : (
+                    <>
+                      Your little <em>local list.</em>
+                    </>
+                  )}
+                </h1>
+                <p>
+                  {tab === "food"
+                    ? "Real hawker heroes. The kind of food you’ll come back for."
+                    : tab === "activities"
+                      ? "Play a game, meet your neighbours, find something that feels like you."
+                      : "Saved on this device. Your next adventure is ready when you are."}
+                </p>
+              </div>
+              <div className="search">
+                <Search size={17} />
+                <input
+                  aria-label="Search places"
+                  placeholder="Find your kind of good…"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setPage(0);
+                  }}
+                />
+                {query && (
+                  <button
+                    aria-label="Clear search"
+                    onClick={() => {
+                      setQuery("");
+                      setPage(0);
+                    }}
+                  >
+                    <X size={15} />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="filter-bar">
+              <div className="pills" aria-label="Filter by audience">
+                {["Everyone", "Youths", "Adults"].map((a) => (
+                  <button
+                    key={a}
+                    aria-pressed={a === audience}
+                    className={a === audience ? "active" : ""}
+                    onClick={() => {
+                      setAudience(a);
+                      setPage(0);
+                    }}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+              <span aria-live="polite">{results.length} discoveries</span>
+            </div>
+            {results.length ? (
+              <div className="place-grid">
+                {displayed.map((place) => (
+                  <article
+                    key={place.id}
+                    className={`place-card ${place.color}`}
+                  >
+                    <div className="card-photo">
+                      <button
+                        className="photo-open"
+                        aria-label={`View ${place.name}`}
+                        onClick={() => setSelected(place)}
+                      >
+                        <Photograph photo={placePhoto(place.id)} />
+                      </button>
+                      <span className="floating-label">
+                        {place.category === "Food" ? "GOOD MAKAN" : "GO & DO"}
+                      </span>
+                      <button
+                        className={`heart ${saved.includes(place.id) ? "active" : ""}`}
+                        aria-label={`${saved.includes(place.id) ? "Unsave" : "Save"} ${place.name}`}
+                        aria-pressed={saved.includes(place.id)}
+                        onClick={() => save(place.id)}
+                      >
+                        <Heart
+                          size={19}
+                          fill={
+                            saved.includes(place.id) ? "currentColor" : "none"
+                          }
+                        />
+                      </button>
+                    </div>
+                    <div className="card-body">
+                      <span className="eyebrow">{place.tag}</span>
+                      <h2>
+                        <button onClick={() => setSelected(place)}>
+                          {place.name}
+                          <ArrowUpRight size={20} />
+                        </button>
+                      </h2>
+                      <p>{place.description}</p>
+                      <span className="card-address">
+                        <MapPin size={13} />
+                        {place.address}
+                      </span>
+                      <div className="card-actions">
+                        <button onClick={() => setSelected(place)}>
+                          Take a little look <ArrowRight size={16} />
+                        </button>
+                        <a
+                          aria-label={`Directions to ${place.name}`}
+                          href={maps(place.address)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <MapPin size={15} /> Directions
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="empty">
+                <Search size={36} />
+                <h2>
+                  {tab === "saved" && !query
+                    ? "Your next favourite is out there."
+                    : "No matches this time."}
+                </h2>
+                <p>
+                  {tab === "saved" && !query
+                    ? "Tap a heart on a place to keep it here."
+                    : "Try a different search or audience."}
+                </p>
+                <button
+                  className="button dark"
+                  onClick={() => {
+                    if (tab === "saved") navigate("food");
+                    else {
+                      setQuery("");
+                      setAudience("Everyone");
+                    }
+                  }}
+                >
+                  Explore again <ArrowRight size={17} />
+                </button>
+              </div>
+            )}
+            {pager(
+              pageCount,
+              activePage,
+              tab === "food"
+                ? "Check opening hours before you go."
+                : "Check current availability with the organiser.",
+            )}
+          </div>
+        )}
+        {tab === "news" && (
+          <div className="view news-view" key="news">
+            <div className="view-heading">
+              <div>
+                <span className="eyebrow">AROUND THE BLOCK</span>
+                <h1>
+                  The local <em>buzz.</em>
+                </h1>
+                <p>Small stories. Big neighbourhood energy.</p>
+              </div>
+              <a
+                href="https://moulmein-cairnhill.pa.gov.sg/"
+                target="_blank"
+                rel="noreferrer"
+                className="button outline"
+              >
+                Community updates <ArrowUpRight size={16} />
+              </a>
+            </div>
+            <div className="news-layout">
+              <a
+                className="news-feature"
+                href="https://www.onepa.gov.sg/cc/pek-kio-cc"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Photograph photo={photos.cc} />
+                <div className="news-feature-copy">
+                  <span className="eyebrow">YOUR COMMUNITY CONNECTION</span>
+                  <h2>
+                    Good things happen
+                    <br />
+                    when we get together.
+                  </h2>
+                  <p>Courses, facilities and ways to join in at Pek Kio CC.</p>
+                  <span>
+                    See what’s on at onePA <ArrowUpRight size={18} />
+                  </span>
+                </div>
+              </a>
+              <div className="news-feed">
+                <span className="feed-label">
+                  <span className="status-dot" />
+                  {news.live
+                    ? "Latest indexed stories · refreshed hourly"
+                    : "Reading list · live feed unavailable"}
+                </span>
+                <div className="news-items">
+                  {news.stories
+                    .slice(newsPage * newsSize, (newsPage + 1) * newsSize)
+                    .map((story, i) => (
+                      <a
+                        className="news-item"
+                        key={story.url}
+                        href={story.url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <span className={`story-number color-${i}`}>
+                          {String(newsPage * newsSize + i + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <span>
+                            {story.source} ·{" "}
+                            {new Date(story.date).toLocaleDateString("en-SG", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                              timeZone: "Asia/Singapore",
+                            })}
+                          </span>
+                          <h3>{story.title}</h3>
+                        </div>
+                        <ArrowUpRight size={19} />
+                      </a>
+                    ))}
+                </div>
+                {pager(
+                  newsPageCount,
+                  newsPage,
+                  "Dates shown are publication dates.",
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        {tab === "welcome" && (
+          <div className="view welcome-view" key="welcome">
+            <div className="view-heading">
+              <div>
+                <span className="eyebrow">
+                  NEW KEYS. NEW STREETS. NEW FAVOURITES.
+                </span>
+                <h1>
+                  Hey neighbour. <em>You’re home.</em>
+                </h1>
+                <p>
+                  A few small steps to make Pek Kio feel a little more like
+                  yours.
+                </p>
+              </div>
+              <span className="welcome-spark">✳</span>
+            </div>
+            <div className="welcome-layout">
+              <div className="welcome-photo">
+                <Photograph photo={photos.market} />
+                <span className="floating-label">
+                  YOUR NEIGHBOURHOOD STARTS HERE
+                </span>
+                <div className="welcome-map">
+                  <span>
+                    <TrainFront size={19} />
+                    <strong>Find your bearings</strong>
+                    <small>Farrer Park MRT is a nearby starting point.</small>
+                  </span>
+                  <a
+                    href={maps("Pek Kio Market and Food Centre")}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Open Pek Kio on Google Maps"
+                  >
+                    <ArrowUpRight size={23} />
+                  </a>
+                </div>
+              </div>
+              <div className="checklist">
+                <div className="checklist-heading">
+                  <span className="eyebrow">YOUR FIRST LITTLE ADVENTURES</span>
+                  <b>{done.length} / 3</b>
+                </div>
+                <div className="progress">
+                  <span style={{ width: `${(done.length / 3) * 100}%` }} />
+                </div>
+                {[
+                  {
+                    id: "breakfast",
+                    title: "Find your go-to breakfast",
+                    text: "Start with a wander around Pek Kio Market.",
+                    go: "food",
+                  },
+                  {
+                    id: "walk",
+                    title: "Take the long way home",
+                    text: "Get familiar with Cambridge and Dorset Roads.",
+                    go: "activities",
+                  },
+                  {
+                    id: "hello",
+                    title: "Say your first hello",
+                    text: "Drop by the CC or Residents’ Network.",
+                    go: "activities",
+                  },
+                ].map((item, i) => (
+                  <div
+                    className={`check-row ${done.includes(item.id) ? "complete" : ""}`}
+                    key={item.id}
+                  >
+                    <button
+                      className="check-box"
+                      onClick={() => toggleDone(item.id)}
+                      aria-pressed={done.includes(item.id)}
+                      aria-label={`Mark ${item.title} ${done.includes(item.id) ? "incomplete" : "complete"}`}
+                    >
+                      {done.includes(item.id) ? (
+                        <Check size={19} />
+                      ) : (
+                        String(i + 1).padStart(2, "0")
+                      )}
+                    </button>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                    </div>
+                    <button
+                      className="check-go"
+                      aria-label={`Explore: ${item.title}`}
+                      onClick={() => navigate(item.go as Tab)}
+                    >
+                      <ArrowUpRight size={17} />
+                    </button>
+                  </div>
+                ))}
+                <div className="welcome-note">
+                  <Sparkles size={19} />
+                  <p>
+                    {done.length === 3
+                      ? "Look at you, already a local!"
+                      : "No rush. The best discoveries happen at your pace."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
       <footer>
-        <a className="brand" href="#">
-          <span className="brand-icon">
-            pk<span>✳</span>
-          </span>
-          <span>pek kio</span>
-        </a>
-        <p>
-          An independent guide. Made with a little kampung spirit.
-          <br />
-          Place details checked September 2026. Confirm hours and availability
-          before visiting.
-        </p>
-        <a
-          href="https://github.com/bryanleeeeee/pekkio/issues"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Suggest a little improvement <ArrowUpRight size={15} />
-        </a>
+        <span>
+          Made with a little kampung spirit <Heart size={11} />
+        </span>
+        <div>
+          <button onClick={() => setCredits(true)}>
+            <Camera size={12} /> Photo credits
+          </button>
+          <a
+            href="https://github.com/bryanleeeeee/pekkio/issues"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Suggest a gem <ArrowUpRight size={12} />
+          </a>
+        </div>
       </footer>
       <dialog
-        ref={dialog}
+        ref={detail}
         onCancel={() => setSelected(null)}
+        onClose={() => setSelected(null)}
         onClick={(e) => {
           if (e.target === e.currentTarget) setSelected(null);
         }}
-        onClose={() => setSelected(null)}
         aria-labelledby="place-title"
       >
         {selected && (
@@ -735,26 +805,26 @@ export default function Guide({
               aria-label="Close place details"
               onClick={() => setSelected(null)}
             >
-              <X />
+              <X size={20} />
             </button>
-            <div className={`modal-art ${selected.color}`}>
-              {selected.emoji}
+            <div className="detail-photo">
+              <Photograph photo={placePhoto(selected.id)} />
             </div>
-            <div className="modal-body">
+            <div className="detail-body">
               <span className="eyebrow">
                 {selected.category} · {selected.tag}
               </span>
               <h2 id="place-title">{selected.name}</h2>
               <p>{selected.description}</p>
-              <p className="location">
-                <MapPin size={17} />
+              <span className="card-address">
+                <MapPin size={15} />
                 {selected.address}
-              </p>
+              </span>
               <div className="tip">
                 <strong>A little local know-how</strong>
                 <p>{selected.tip}</p>
               </div>
-              <div className="modal-actions">
+              <div className="detail-actions">
                 <a
                   className="button dark"
                   href={maps(selected.address)}
@@ -773,25 +843,60 @@ export default function Guide({
                   />
                   {saved.includes(selected.id) ? "Saved" : "Save place"}
                 </button>
+                <a
+                  href={selected.source}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="source-link"
+                >
+                  {selected.category === "Food"
+                    ? "Read the food guide"
+                    : "Official details"}{" "}
+                  <ExternalLink size={13} />
+                </a>
               </div>
-              <a
-                className="source-link"
-                href={selected.source}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {selected.category === "Food"
-                  ? "Read the food guide"
-                  : "Visit the official source"}{" "}
-                <ArrowUpRight size={14} />
-              </a>
+              <PhotoCredit photo={placePhoto(selected.id)} />
             </div>
           </>
         )}
       </dialog>
+      <dialog
+        ref={creditDialog}
+        onCancel={() => setCredits(false)}
+        onClose={() => setCredits(false)}
+        aria-labelledby="credits-title"
+        className="credits-dialog"
+      >
+        <button
+          className="dialog-close"
+          aria-label="Close photo credits"
+          onClick={() => setCredits(false)}
+        >
+          <X size={20} />
+        </button>
+        <div className="detail-body">
+          <span className="eyebrow">THE REAL PEK KIO</span>
+          <h2 id="credits-title">Behind the photographs.</h2>
+          <p>
+            Photographs show the actual locations and food. They may predate
+            your visit. Images are cropped to fit; all rights remain with their
+            respective creators.
+          </p>
+          {Object.entries(photos).map(([id, photo]) => (
+            <div className="credit-row" key={id}>
+              <p>{photo.alt}</p>
+              <PhotoCredit photo={photo} />
+            </div>
+          ))}
+          <small>
+            Independent neighbourhood guide. Place details checked September
+            2026. Confirm hours and availability with the venue.
+          </small>
+        </div>
+      </dialog>
       <div className={`toast ${notice ? "visible" : ""}`} role="status">
         {notice}
       </div>
-    </>
+    </div>
   );
 }
