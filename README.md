@@ -65,3 +65,7 @@ The GLB uses Draco compression and material batching (about 1.4 MB in this relea
 **Attribution/licence:** © OpenStreetMap contributors, [ODbL 1.0](https://www.openstreetmap.org/copyright). The source snapshot is available at `public/data/pekkio-osm.json.gz`; retrieval/query/projection/provenance are in `public/data/district.json`. Preserve attribution and comply with ODbL when redistributing source or derived map data. The website always displays the attribution link on the district view, and the render includes an attribution caption.
 
 To rebuild from the included snapshot: `blender --background --python scripts/build_neighbourhood.py` (Blender 5.2.1). It reads the raw JSON if available or the included gzip otherwise, generates geometry, metadata, compressed GLB, Blender scene and PNG. Use sharp to convert PNG to WebP. To refresh the map snapshot first, run `node scripts/fetch_neighbourhood.mjs`; this makes a bounded Overpass request and writes the snapshot and retrieval metadata. Review changes and regenerate the scene rather than fetching map geometry on every visitor request.
+
+## ChatGPT Sites copy
+
+This checkout is the ChatGPT Sites edition of https://github.com/bryanleeeeee/pekkio. Next.js exports the existing client experience; a small Cloudflare-compatible Worker serves assets and refreshes the Google News RSS feed through /api/news. AI inference and passport storage remain in the browser. Build with npm run build. The output is dist/client plus dist/server/index.js and the Sites manifest. The original Vercel repository is independent.

@@ -17,7 +17,7 @@ export async function getNews(): Promise<{ stories: Story[]; live: boolean }> {
   try {
     const response = await fetch(
       "https://news.google.com/rss/search?q=%22Pek+Kio%22&hl=en-SG&gl=SG&ceid=SG:en",
-      { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) },
+      { signal: AbortSignal.timeout(5000) },
     );
     if (!response.ok) throw new Error("Feed unavailable");
     const data = new XMLParser({

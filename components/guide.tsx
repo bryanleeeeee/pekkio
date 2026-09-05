@@ -96,10 +96,19 @@ function PhotoCredit({ photo }: { photo: Photo }) {
   );
 }
 export default function Guide({
-  news,
+  news: initialNews,
 }: {
   news: { stories: Story[]; live: boolean };
 }) {
+  const [news, setNews] = useState(initialNews);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/news", { signal: controller.signal })
+      .then(r => { if (!r.ok) throw Error("News unavailable"); return r.json(); })
+      .then(value => { if (Array.isArray(value.stories) && typeof value.live === "boolean") setNews(value); })
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
   const [tab, setTab] = useState<Tab>("discover");
   const [page, setPage] = useState(0);
   const [mobile, setMobile] = useState(false);
