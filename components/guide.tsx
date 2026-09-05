@@ -253,7 +253,11 @@ export default function Guide({
             The local buzz
           </a>
         </nav>
-        <button className="saved-button" onClick={() => discover("All", true)}>
+        <button
+          className="saved-button"
+          aria-label="View my saved places"
+          onClick={() => discover("All", true)}
+        >
           <Heart size={17} /> <span>My little list</span>
           <b>{saved.length}</b>
         </button>
