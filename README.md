@@ -1,0 +1,34 @@
+# Pek Kio
+
+A responsive, pastel neighbourhood guide for Pek Kio, Singapore. Built with Next.js App Router and TypeScript.
+
+## Run locally
+
+Use Node.js 24 LTS.
+
+    npm ci
+    npm run dev
+
+## Verify
+
+    npm run typecheck
+    npm run build
+
+## Features
+
+- Searchable food and activity directory, with youth/adult filters.
+- Place details, Google Maps directions and source links.
+- Favourites and resident checklist stored locally on the visitor's device. No account or personal data collection.
+- Google News RSS fetched server-side, revalidated hourly, sorted by publication date. On timeout, invalid data or upstream failure, a clearly labelled dated editorial fallback is displayed.
+- Responsive layout, keyboard-operable native modal, labelled controls, skip link and reduced-motion support.
+- Original inline SVG neighbourhood artwork and illustrative emoji cards; these are not venue photographs.
+
+## Content maintenance
+
+Edit `lib/places.ts` to maintain places, source URLs, audience tags and tips. Editorial details were researched 5 September 2026. Prices and opening hours are intentionally not presented as live information. Listings link to organisers for current bookings, eligibility and availability. This is an independent guide, not an official government website.
+
+News is sourced through Google News RSS; feed availability and index coverage are not guaranteed. `lib/news.ts` contains the fetch and fallback logic. The feed is refreshed on requests through Next.js incremental static regeneration, not a background scheduler. Headlines link to publishers; no full articles are republished.
+
+## Deployment
+
+Deploy the repository to Vercel using the Next.js preset. No environment variables or database are required. Production build: `npm run build`. Framework output is automatically detected.
