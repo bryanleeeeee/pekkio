@@ -168,7 +168,13 @@ button:hover:not(:disabled) {
   min-height: 64px;
   align-items: center;
 }
-.tabbar button {
+.tabbar-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.tabbar button,
+.tab-cta {
   padding: 12px 22px;
   border-radius: 9px;
   display: flex;
@@ -177,6 +183,16 @@ button:hover:not(:disabled) {
   font-size: 12px;
   color: #788172;
   font-weight: 500;
+}
+.tab-cta {
+  color: #f8f8ed;
+  background: #cf7a63;
+  box-shadow: 0 3px 7px #cf7a6330;
+  white-space: nowrap;
+}
+.tab-cta:hover {
+  background: #ba664f;
+  color: #fffdf5;
 }
 .tabbar button.active {
   background: var(--ink);
@@ -1282,6 +1298,10 @@ dialog::backdrop {
     justify-content: space-between;
     padding: 7px 13px;
   }
+  .tabbar-tabs {
+    flex: 1;
+    gap: 4px;
+  }
   .tabbar button {
     padding: 8px 10px;
     flex: 1;
@@ -1292,6 +1312,17 @@ dialog::backdrop {
     white-space: nowrap;
   }
   .tabbar button svg {
+    width: 18px;
+    height: 18px;
+  }
+  .tab-cta {
+    padding: 8px 8px;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 8px;
+    border-radius: 9px;
+  }
+  .tab-cta svg {
     width: 18px;
     height: 18px;
   }
@@ -3005,12 +3036,18 @@ dialog::backdrop {
   .tabbar {
     gap: 2px !important;
   }
+  .tabbar-tabs {
+    gap: 2px !important;
+  }
   .tabbar button {
     padding: 7px 3px !important;
     min-width: 0;
     flex: 1;
   }
   .tabbar button span {
+    font-size: 7px !important;
+  }
+  .tab-cta span {
     font-size: 7px !important;
   }
   .quest-heading {

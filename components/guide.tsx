@@ -35,10 +35,10 @@ import { photos, placePhoto, type Photo } from "@/lib/photos";
 import type { Story } from "@/lib/news";
 const tabs = [
   { id: "discover", label: "Discover", Icon: Compass },
-  { id: "quest", label: "AI Quest", Icon: Sparkles },
-  { id: "scene", label: "3D Pek Kio", Icon: Box },
   { id: "food", label: "Good food", Icon: Utensils },
   { id: "activities", label: "Go & do", Icon: Sun },
+  { id: "quest", label: "AI Quest", Icon: Sparkles },
+  { id: "scene", label: "3D Pek Kio", Icon: Box },
   { id: "news", label: "Local buzz", Icon: Newspaper },
   { id: "welcome", label: "New here?", Icon: Home },
 ] as const;
@@ -310,23 +310,34 @@ export default function Guide({
           <b>{saved.length}</b>
         </button>
       </header>
-      <nav className="tabbar" role="tablist" aria-label="Neighbourhood guide">
-        {tabs.map(({ id, label, Icon }, i) => (
-          <button
-            key={id}
-            id={`tab-${id}`}
-            role="tab"
-            aria-selected={tab === id}
-            aria-controls="panel"
-            tabIndex={tab === id || (tab === "saved" && i === 0) ? 0 : -1}
-            onKeyDown={(e) => keyboard(e, i)}
-            onClick={() => navigate(id)}
-            className={tab === id ? "active" : ""}
-          >
-            <Icon size={18} />
-            <span>{label}</span>
-          </button>
-        ))}
+      <nav className="tabbar" aria-label="Neighbourhood guide">
+        <div className="tabbar-tabs" role="tablist">
+          {tabs.map(({ id, label, Icon }, i) => (
+            <button
+              key={id}
+              id={`tab-${id}`}
+              role="tab"
+              aria-selected={tab === id}
+              aria-controls="panel"
+              tabIndex={tab === id || (tab === "saved" && i === 0) ? 0 : -1}
+              onKeyDown={(e) => keyboard(e, i)}
+              onClick={() => navigate(id)}
+              className={tab === id ? "active" : ""}
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+            </button>
+          ))}
+        </div>
+        <a
+          className="tab-cta"
+          href="https://pek-kio-farrer-park-info.bryan336144.chatgpt.site/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>Let’s go</span>
+          <ArrowUpRight size={16} aria-hidden="true" />
+        </a>
       </nav>
       <main
         ref={main}
